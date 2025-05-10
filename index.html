@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Juna - Virtual Assistant</title>
+  <style>
+    body {
+      background-color: #0d0f2b;
+      color: white;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    .container {
+      text-align: center;
+    }
+    img {
+      width: 200px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+    button {
+      background-color: #00bcd4;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 18px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0097a7;
+    }
+    #output {
+      margin-top: 20px;
+      font-size: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="bot.png" alt="Juna Bot" />
+    <h1>Hello, I'm <strong>Juna</strong>, your Virtual Assistant</h1>
+    <button onclick="startListening()">Talk to Juna</button>
+    <div id="output"></div>
+  </div>
+
+  <script>
+    const output = document.getElementById('output');
+    const synth = window.speechSynthesis;
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+
+    function speak(text) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      synth.speak(utterance);
+      output.innerText = text;
+    }
+
+    function startListening() {
+      recognition.start();
+    }
+
+    recognition.onresult = function (event) {
+      const userSpeech = event.results[0][0].transcript.toLowerCase();
+      output.innerText = `You said: "${userSpeech}"`;
+
+      if (userSpeech.includes('hello juna')) {
+        speak('Hello sir, what can I help you with?');
+      } else if (userSpeech.includes('who are you')) {
+        speak('I am a virtual assistant, and I was created by Younas sir.');
+      } else if (userSpeech.includes('open youtube')) {
+        speak('Opening YouTube');
+        window.open('https://www.youtube.com', '_blank');
+      } else if (userSpeech.includes('open google')) {
+        speak('Opening Google');
+        window.open('https://www.google.com', '_blank');
+      } else if (userSpeech.includes('open facebook')) {
+        speak('Opening Facebook');
+        window.open('https://www.facebook.com', '_blank');
+      } else if (
+        userSpeech.includes('study') ||
+        userSpeech.includes('math') ||
+        userSpeech.includes('science') ||
+        userSpeech.includes('how to') ||
+        userSpeech.includes('programming')
+      ) {
+        speak('Taking you to a helpful study website');
+        window.open('https://www.khanacademy.org', '_blank');
+      } else {
+        speak('Sorry, I did not understand that. Please try again.');
+      }
+    };
+
+    recognition.onerror = function () {
+      speak('Sorry, I couldn\'t hear you properly. Please try again.');
+    };
+  </script>
+</body>
+</html>
